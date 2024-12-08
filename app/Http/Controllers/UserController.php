@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -27,7 +28,11 @@ class UserController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Users/Create');
+        $roles = Role::all();
+
+        return Inertia::render('Users/Create', [
+            'availableRoles' => $roles
+        ]);
     }
 
     /**
@@ -40,6 +45,7 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed'],
             'avatar' => 'nullable|image|max:2048',
+            'roles' => 'required|array',  // Add roles validation
         ]);
 
         // Hash the password
@@ -50,7 +56,9 @@ class UserController extends Controller
             $validated['avatar'] = $request->file('avatar')->store('avatars', 'public');
         }
 
-        User::create($validated);
+        $user = User::create($validated);
+
+        $user->syncRoles($request->roles);
 
         return redirect()->route('users.index')
             ->with('success', 'User created successfully!');
@@ -71,7 +79,8 @@ class UserController extends Controller
     public function edit(User $user)
     {
         return Inertia::render('Users/Edit', [
-            'user' => $user
+            'user' => $user->load('roles'),
+            'availableRoles' => Role::all()
         ]);
     }
 
@@ -87,6 +96,7 @@ class UserController extends Controller
             'points' => 'required|numeric|min:0',
 //            'password' => $request->has('password') ? ['required', 'confirmed'] : '',
             'avatar' => 'nullable|image|max:2048',
+            'roles' => 'required|array',
         ]);
 
         // Remove password from validated data if not provided
@@ -106,6 +116,7 @@ class UserController extends Controller
         }
 
         $user->update($validated);
+        $user->syncRoles($request->roles);
 
         return redirect()->route('users.index')
             ->with('success', 'User updated successfully!');

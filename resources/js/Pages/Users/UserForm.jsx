@@ -10,11 +10,11 @@ import {
     Text,
     Group,
     Image,
-    Stack,
+    Stack, MultiSelect,
 } from '@mantine/core';
 import { User, Mail, Lock, Upload, Image as ImageIcon } from 'lucide-react';
 
-export default function UserForm({ user = null }) {
+export default function UserForm({ user = null, availableRoles }) {
     const [imagePreview, setImagePreview] = useState(user?.avatar ? `/storage/${user.avatar}` : null);
 
     const { data, setData, post, processing, errors } = useForm({
@@ -23,7 +23,14 @@ export default function UserForm({ user = null }) {
         password: '',
         password_confirmation: '',
         avatar: null,
+        roles: [],  // Add roles field
     });
+
+    // Transform roles for MultiSelect
+    const roleOptions = availableRoles.map(role => ({
+        value: role.name,
+        label: role.name.charAt(0).toUpperCase() + role.name.slice(1)
+    }));
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -75,6 +82,16 @@ export default function UserForm({ user = null }) {
                         required
                     />
 
+                    <MultiSelect
+                        label="Roles"
+                        placeholder="Select roles"
+                        data={roleOptions}
+                        value={data.roles}
+                        onChange={(value) => setData('roles', value)}
+                        error={errors.roles}
+                        required
+                    />
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <PasswordInput
                             label="Password"
@@ -96,6 +113,8 @@ export default function UserForm({ user = null }) {
                             required
                         />
                     </div>
+
+
 
                     <div className="space-y-2">
                         <FileInput

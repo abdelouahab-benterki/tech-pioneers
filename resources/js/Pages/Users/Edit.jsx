@@ -14,7 +14,7 @@ import {
     Image,
     Stack,
     Switch,
-    NumberInput,
+    NumberInput, MultiSelect,
 } from '@mantine/core';
 import {
     User,
@@ -25,10 +25,16 @@ import {
     Trophy,
 } from 'lucide-react';
 
-export default function EditUser({ user }) {
+export default function EditUser({ user, availableRoles }) {
     const [imagePreview, setImagePreview] = useState(user.avatar ? `/storage/${user.avatar}` : null);
     const [changePassword, setChangePassword] = useState(false);
     const { errors } = usePage().props
+    const roleOptions = availableRoles.map(role => ({
+        value: role.name,
+        label: role.name.charAt(0).toUpperCase() + role.name.slice(1)
+    }));
+
+
     const { data, setData, post, processing } = useForm({
         name: user.name,
         email: user.email,
@@ -36,8 +42,11 @@ export default function EditUser({ user }) {
         password_confirmation: '',
         avatar: null,
         points: user.points,
-
+        roles: user.roles.map(role => role.name),
     });
+    
+
+
 
     console.log(errors)
 
@@ -111,6 +120,16 @@ export default function EditUser({ user }) {
                                     icon={<Trophy className="h-4 w-4" />}
                                     min={0}
                                     precision={2}
+                                />
+
+                                <MultiSelect
+                                    label="Roles"
+                                    placeholder="Select roles"
+                                    data={roleOptions}
+                                    value={data.roles}
+                                    onChange={(value) => setData('roles', value)}
+                                    error={errors.roles}
+                                    required
                                 />
 
                                 <Switch

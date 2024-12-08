@@ -2,7 +2,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import UserForm from './UserForm';
 import { Head } from '@inertiajs/react';
 
-export default function CreateUser() {
+export default function CreateUser({availableRoles}) {
     return (
         <AuthenticatedLayout
             header={
@@ -14,7 +14,7 @@ export default function CreateUser() {
             <Head title="Create User" />
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <UserForm />
+                    <UserForm availableRoles={availableRoles} />
                 </div>
             </div>
         </AuthenticatedLayout>
