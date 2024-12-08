@@ -4,18 +4,31 @@ import { usePage } from "@inertiajs/react";
 import { getNotificationColor, getNotificationIcon, getNotificationTitle } from "@/Utils/notifications.js";
 
 export default function NotificationSystem() {
-    const audioRef = useRef(new Audio("/sounds/notification.mp3"));
+    const audioRefs = useRef(new Map());
     const audioContextRef = useRef(null);
-    const sourceNodeRef = useRef(null);
+    const sourceNodesRef = useRef(new Map());
     const hasInteracted = useRef(false);
     const auth = usePage().props.auth;
+
+    // Initialize audio for a specific sound path
+    const initializeAudio = (soundPath) => {
+        if (!audioRefs.current.has(soundPath)) {
+            const audio = new Audio(`/sounds/${soundPath}`);
+            audioRefs.current.set(soundPath, audio);
+            audio.load();
+
+            if (audioContextRef.current) {
+                const sourceNode = audioContextRef.current.createMediaElementSource(audio);
+                sourceNode.connect(audioContextRef.current.destination);
+                sourceNodesRef.current.set(soundPath, sourceNode);
+            }
+        }
+    };
 
     // Initialize audio context after user interaction
     const initializeAudioContext = () => {
         if (!hasInteracted.current && !audioContextRef.current) {
             audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
-            sourceNodeRef.current = audioContextRef.current.createMediaElementSource(audioRef.current);
-            sourceNodeRef.current.connect(audioContextRef.current.destination);
             hasInteracted.current = true;
 
             // Remove event listeners after first interaction
@@ -24,8 +37,11 @@ export default function NotificationSystem() {
         }
     };
 
-    const playNotificationSound = async () => {
-        const audio = audioRef.current;
+    const playNotificationSound = async (soundPath) => {
+        // Initialize audio for this sound path if it doesn't exist
+        initializeAudio(soundPath);
+
+        const audio = audioRefs.current.get(soundPath);
         const context = audioContextRef.current;
 
         try {
@@ -44,19 +60,15 @@ export default function NotificationSystem() {
     };
 
     useEffect(() => {
-
         // Add event listeners for user interaction
         document.addEventListener('click', initializeAudioContext);
         document.addEventListener('keydown', initializeAudioContext);
-
-        // Preload the audio
-        audioRef.current.load();
 
         window.Echo.private(`challenges`)
             .listen("ChallengeEvent", (notification) => {
                 // Play sound if specified
                 if (notification.sound) {
-                    playNotificationSound();
+                    playNotificationSound(notification.sound);
                 }
 
                 console.log('notification received:', notification);
@@ -86,14 +98,20 @@ export default function NotificationSystem() {
             document.removeEventListener('keydown', initializeAudioContext);
             window.Echo.disconnect();
 
-            // Cleanup audio context
+            // Cleanup audio context and nodes
+            sourceNodesRef.current.forEach(sourceNode => {
+                sourceNode.disconnect();
+            });
+
             if (audioContextRef.current) {
                 audioContextRef.current.close();
                 audioContextRef.current = null;
-                sourceNodeRef.current = null;
             }
+
+            sourceNodesRef.current.clear();
+            audioRefs.current.clear();
         };
     }, []);
 
-    return null;  // Component doesn't need to render anything
+    return null;
 }

@@ -44,7 +44,7 @@ export default function EditUser({ user, availableRoles }) {
         points: user.points,
         roles: user.roles.map(role => role.name),
     });
-    
+
 
 
 
