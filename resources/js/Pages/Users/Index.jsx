@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, Link } from '@inertiajs/react';
+import {Head, Link, router} from '@inertiajs/react';
 import {
     Table,
     Button,
@@ -211,7 +211,7 @@ export default function Index({ users }) {
                                                             icon={<Trash className="h-4 w-4" />}
                                                             onClick={() => {
                                                                 if (confirm('Are you sure you want to delete this user?')) {
-                                                                    // Handle delete
+                                                                    router.delete(route('users.destroy', user.id));
                                                                 }
                                                             }}
                                                         >
