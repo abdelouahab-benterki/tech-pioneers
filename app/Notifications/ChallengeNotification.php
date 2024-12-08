@@ -51,7 +51,7 @@ class ChallengeNotification extends Notification implements ShouldQueue
         return match ($this->eventType) {
             'activated' => 'notification.mp3',
             'solved' => 'success.mp3',
-            'needs_review' => 'alert.mp3',
+            'needs_review' => 'warning.mp3',
             'error' => 'error.mp3',
             default => 'notification.mp3',
         };

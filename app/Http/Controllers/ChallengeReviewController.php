@@ -44,8 +44,10 @@ class ChallengeReviewController extends Controller
             // Update user's total points
             $attempt->user->increment('points', $validated['points_earned']);
             $attempt->user->notify(new ChallengeNotification($attempt->challenge, 'solved', 'You have solved the challenge.'));
+        }else{
+            $attempt->user->notify(new ChallengeNotification($attempt->challenge, 'error', 'Your Solution For The Challenge is Incorrect'));
         }
-        $attempt->user->notify(new ChallengeNotification($attempt->challenge, 'error', 'Your Solution For The Challenge is Incorrect'));
+
 
         return back()->with('success', 'Attempt reviewed successfully.');
     }

@@ -24,12 +24,12 @@ class UserSeeder extends Seeder
         $admin->assignRole('admin');
 
         // Create Competitor
-        $competitor = User::create([
-            'name' => 'Competitor User',
-            'email' => 'competitor@example.com',
-            'password' => Hash::make('password'),
-            'email_verified_at' => now(),
-        ]);
-        $competitor->assignRole('competitor');
+//        $competitor = User::create([
+//            'name' => 'Competitor User',
+//            'email' => 'competitor@example.com',
+//            'password' => Hash::make('password'),
+//            'email_verified_at' => now(),
+//        ]);
+//        $competitor->assignRole('competitor');
     }
 }

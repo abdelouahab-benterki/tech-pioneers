@@ -12,7 +12,7 @@ import {
     MantineProvider,
 } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
-import {Trophy, Award, Target, Users} from 'lucide-react';
+import {Trophy, Award, Target, Users, ClipboardCheck, LayoutDashboard } from 'lucide-react';
 import ApplicationLogo from "@/Components/ApplicationLogo.jsx";
 import FlashMessages from "@/Components/FlashMessages.jsx";
 import NotificationSystem from "@/Components/NotificationSystem.jsx";
@@ -22,6 +22,7 @@ const MainLinks = ({ active }) => {
     const isAdmin = auth.user.roles.includes('admin');
 
     const links = [
+        { icon: LayoutDashboard , label: 'Dashboard', route: 'dashboard' },
         { icon: Target, label: 'Challenges', route: 'challenges.index' },
 
     ];
@@ -41,6 +42,11 @@ const MainLinks = ({ active }) => {
             icon: Trophy,
             label: 'Points',
             route: 'points.tracking'
+        });
+        links.push({
+            icon: ClipboardCheck,
+            label: 'Challenge Reviews',
+            route: 'challenges.review'
         })
     }
 

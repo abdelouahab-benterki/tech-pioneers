@@ -13,6 +13,7 @@ import {
     FileInput,
     Title,
     Text,
+    Select
 } from '@mantine/core';
 import {
     Trophy,
@@ -20,8 +21,15 @@ import {
     Star,
     ClipboardCheck,
     Trash,
-    Save,
+    Save, Target,
 } from 'lucide-react';
+
+
+const CATEGORIES = [
+    { value: 'analysis', label: 'Analysis & Investigation' },
+    { value: 'solution', label: 'Solution Development' },
+    { value: 'optimization', label: 'System Optimization' }
+];
 
 export default function Create() {
     const [imagePreview, setImagePreview] = useState(null);
@@ -32,6 +40,7 @@ export default function Create() {
         points: 0,
         is_published: false,
         requires_review: false,
+        category: '',
     });
 
     const handleSubmit = (e) => {
@@ -101,6 +110,19 @@ export default function Create() {
                                 minRows={4}
                                 icon={<ClipboardCheck className="h-4 w-4" />}
                                 required
+                                classNames={{
+                                    input: 'focus:border-primary',
+                                }}
+                            />
+                            <Select
+                                label="Category"
+                                placeholder="Select a category"
+                                data={CATEGORIES}
+                                value={data.category}
+                                onChange={(value) => setData('category', value)}
+                                error={errors.category}
+                                required
+                                icon={<Target className="h-4 w-4" />}
                                 classNames={{
                                     input: 'focus:border-primary',
                                 }}

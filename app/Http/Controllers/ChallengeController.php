@@ -71,6 +71,7 @@ class ChallengeController extends Controller
             'points' => 'required|numeric|min:0',
             'is_published' => 'boolean',
             'requires_review' => 'boolean',
+            'category' => 'required|string|in:analysis,solution,optimization',
         ]);
 
         // Handle image upload if present
@@ -232,8 +233,10 @@ class ChallengeController extends Controller
 
                 return redirect()->route('challenges.index')
                     ->with('success', "Correct! You earned {$pointsEarned} points!");
+            }else{
+                auth()->user()->notify(new ChallengeNotification($challenge, 'error', 'Incorrect solution!'));
             }
-            auth()->user()->notify(new ChallengeNotification($challenge, 'error', 'Incorrect solution!'));
+
             return back()->with('error', 'Incorrect solution. Try again!');
         }
 
@@ -262,6 +265,7 @@ class ChallengeController extends Controller
             'points' => 'required|numeric|min:0',
             'is_published' => 'boolean',
             'requires_review' => 'boolean',
+            'category' => 'required|string|in:analysis,solution,optimization',
         ]);
 
         if ($request->hasFile('image')) {
