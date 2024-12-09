@@ -41,6 +41,7 @@ export default function Create() {
         is_published: false,
         requires_review: false,
         category: '',
+        duration_minutes: 30,
     });
 
     const handleSubmit = (e) => {
@@ -181,6 +182,19 @@ export default function Create() {
                                         input: 'focus:border-primary',
                                     }}
                                     description="Number of times a participant can attempt this challenge"
+                                /><NumberInput
+                                    label="Duration (minutes)"
+                                    placeholder="Enter challenge duration"
+                                    value={data.duration_minutes}
+                                    onChange={(value) => setData('duration_minutes', value)}
+                                    error={errors.duration_minutes}
+                                    min={1}
+                                    required
+                                    icon={<Repeat className="h-4 w-4" />}
+                                    classNames={{
+                                        input: 'focus:border-primary',
+                                    }}
+                                    description="Duration of the Challenge in minutes"
                                 />
                             </div>
 
@@ -189,22 +203,18 @@ export default function Create() {
                                     label="Publish Challenge"
                                     checked={data.is_published}
                                     onChange={(e) => setData('is_published', e.currentTarget.checked)}
-                                    color="primary"
+
                                     size="md"
-                                    classNames={{
-                                        track: 'bg-primary',
-                                    }}
+
                                 />
 
                                 <Switch
                                     label="Requires Review"
                                     checked={data.requires_review}
                                     onChange={(e) => setData('requires_review', e.currentTarget.checked)}
-                                    color="primary"
+
                                     size="md"
-                                    classNames={{
-                                        track: 'bg-primary',
-                                    }}
+
                                 />
                             </div>
 

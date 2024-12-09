@@ -73,6 +73,7 @@ class ChallengeController extends Controller
             'requires_review' => 'boolean',
             'category' => 'required|string|in:analysis,solution,optimization',
             'max_attempts' => 'required|integer|min:1',
+            'duration_minutes' => 'required|integer|min:1',
         ]);
 
         // Handle image upload if present
@@ -284,6 +285,7 @@ class ChallengeController extends Controller
             'requires_review' => 'boolean',
             'category' => 'required|string|in:analysis,solution,optimization',
             'max_attempts' => 'required|integer|min:1',
+            'duration_minutes' => 'required|integer|min:1',
         ]);
 
         if ($request->hasFile('image')) {

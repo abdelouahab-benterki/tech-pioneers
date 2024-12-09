@@ -41,6 +41,7 @@ export default function Edit({ challenge }) {
         requires_review: challenge?.requires_review || false,
         category: challenge?.category || '',
         max_attempts: challenge?.max_attempts || 3,
+        duration_minutes: challenge?.duration_minutes || 0,
     });
 
     const {errors} = usePage().props;
@@ -54,6 +55,7 @@ export default function Edit({ challenge }) {
         formData.append('points', data.points);
         formData.append('category', data.category);
         formData.append('max_attempts', data.max_attempts);
+        formData.append('duration_minutes', data.duration_minutes);
         formData.append('is_published', data.is_published ? '1' : '0');
         formData.append('requires_review', data.requires_review ? '1' : '0');
 
@@ -198,6 +200,20 @@ export default function Edit({ challenge }) {
                                     }}
                                     description="Number of times a participant can attempt this challenge"
                                 />
+                                <NumberInput
+                                    label="Duration (minutes)"
+                                    placeholder="Enter challenge duration"
+                                    value={data.duration_minutes}
+                                    onChange={(value) => setData('duration_minutes', value)}
+                                    error={errors.duration_minutes}
+                                    min={1}
+                                    required
+                                    icon={<Repeat className="h-4 w-4" />}
+                                    classNames={{
+                                        input: 'focus:border-primary',
+                                    }}
+                                    description="Duration of the Challenge in minutes"
+                                />
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -205,22 +221,18 @@ export default function Edit({ challenge }) {
                                     label="Publish Challenge"
                                     checked={data.is_published}
                                     onChange={(e) => setData('is_published', e.currentTarget.checked)}
-                                    color="primary"
+
                                     size="md"
-                                    classNames={{
-                                        track: 'bg-primary',
-                                    }}
+
                                 />
 
                                 <Switch
                                     label="Requires Review"
                                     checked={data.requires_review}
                                     onChange={(e) => setData('requires_review', e.currentTarget.checked)}
-                                    color="primary"
+
                                     size="md"
-                                    classNames={{
-                                        track: 'bg-primary',
-                                    }}
+                                    
                                 />
                             </div>
 
