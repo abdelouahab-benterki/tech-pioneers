@@ -34,7 +34,7 @@ export default function SolveChallenge({ challenge, assignment }) {
     const [timeLeft, setTimeLeft] = useState(null);
     const [pdfModalOpen, setPdfModalOpen] = useState(false);
 
-    console.log('Challenge:', challenge);
+
 
     // Fetch attempts through challenge relationship
     const attempts = challenge.attempts?.filter(
@@ -54,7 +54,7 @@ export default function SolveChallenge({ challenge, assignment }) {
         assignment.challenge_variant_id
     ]);
 
-    console.log('PDF URL:', pdfUrl);
+
 
     //Calculate remaining time
     useEffect(() => {
