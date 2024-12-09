@@ -49,7 +49,7 @@
         "embla-carousel-react": "^7.1.0",
         "framer-motion": "^11.12.0",
         "lucide-react": "^0.462.0",
-        "pdfjs-dist": "^3.9.179",
+        "pdfjs-dist": "^4.0.189",
         "recharts": "^2.14.1"
     }
 }
