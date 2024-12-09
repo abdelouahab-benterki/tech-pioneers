@@ -3,6 +3,6 @@
 use Illuminate\Support\Facades\Broadcast;
 
 
-Broadcast::channel('challenges', function ($user) {
-    return true; // Or add your authorization logic
+Broadcast::channel('user.{id}', function ($user, $id) {
+    return (int) $user->id === (int) $id;
 });

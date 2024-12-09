@@ -9,6 +9,7 @@ export default function NotificationSystem() {
     const sourceNodesRef = useRef(new Map());
     const hasInteracted = useRef(false);
     const auth = usePage().props.auth;
+    const userId = auth.user.id;
 
     // Initialize audio for a specific sound path
     const initializeAudio = (soundPath) => {
@@ -64,7 +65,7 @@ export default function NotificationSystem() {
         document.addEventListener('click', initializeAudioContext);
         document.addEventListener('keydown', initializeAudioContext);
 
-        window.Echo.private(`challenges`)
+        window.Echo.private(`user.${userId}`)
             .listen("ChallengeEvent", (notification) => {
                 // Play sound if specified
                 if (notification.sound) {

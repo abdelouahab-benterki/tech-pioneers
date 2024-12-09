@@ -32,7 +32,9 @@ class ChallengeEvent implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return new PrivateChannel('challenges');
+        return [
+            new PrivateChannel('user.' . $this->notifiable_id),
+        ];
     }
 
 

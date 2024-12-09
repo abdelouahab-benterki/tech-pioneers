@@ -232,7 +232,7 @@ export default function Edit({ challenge }) {
                                     onChange={(e) => setData('requires_review', e.currentTarget.checked)}
 
                                     size="md"
-                                    
+
                                 />
                             </div>
 
