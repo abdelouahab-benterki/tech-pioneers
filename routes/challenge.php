@@ -56,7 +56,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/challenges/{challenge}/variants/{variant}/edit', [ChallengeVariantController::class, 'edit'])
             ->name('challenges.variants.edit');
 
-        Route::put('/challenges/{challenge}/variants/{variant}', [ChallengeVariantController::class, 'update'])
+        Route::post('/challenges/{challenge}/variants/{variant}', [ChallengeVariantController::class, 'update'])
             ->name('challenges.variants.update');
 
         Route::delete('/challenges/{challenge}/variants/{variant}', [ChallengeVariantController::class, 'destroy'])
@@ -79,6 +79,10 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/challenges/{challenge}/variants/{variant}/download', [ChallengeVariantController::class, 'download'])
             ->name('challenges.variants.download');
+
+        Route::get('/challenges/{challenge}/variants/{variant}/preview',
+            [ChallengeVariantController::class, 'preview'])
+            ->name('challenges.variants.preview');
     });
 
     // Move this AFTER all specific routes

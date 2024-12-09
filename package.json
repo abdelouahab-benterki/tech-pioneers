@@ -42,12 +42,14 @@
         "@tiptap/pm": "^2.10.3",
         "@tiptap/react": "^2.10.3",
         "@tiptap/starter-kit": "^2.10.3",
+        "@types/pdfjs-dist": "^2.10.377",
         "date-fns": "^4.1.0",
         "date-fns-tz": "^3.2.0",
         "dayjs": "^1.11.13",
         "embla-carousel-react": "^7.1.0",
         "framer-motion": "^11.12.0",
         "lucide-react": "^0.462.0",
+        "pdfjs-dist": "^4.9.155",
         "recharts": "^2.14.1"
     }
 }

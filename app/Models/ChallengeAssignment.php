@@ -35,4 +35,5 @@ class ChallengeAssignment extends Model
     {
         return $this->belongsTo(ChallengeVariant::class, 'challenge_variant_id');
     }
+
 }

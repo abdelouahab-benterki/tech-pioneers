@@ -20,7 +20,7 @@ import {
     ClipboardCheck,
     Trash,
     Save,
-    AlertCircle,
+    AlertCircle, Repeat,
 } from 'lucide-react';
 
 export default function ChallengeForm({ challenge = null }) {
@@ -34,6 +34,7 @@ export default function ChallengeForm({ challenge = null }) {
         points: challenge?.points || 0,
         is_published: challenge?.is_published || false,
         requires_review: challenge?.requires_review || false,
+        max_attempts: challenge?.max_attempts || 3,
     });
     console.log(data)
     const handleSubmit = (e) => {
@@ -169,6 +170,20 @@ export default function ChallengeForm({ challenge = null }) {
                         classNames={{
                             input: 'focus:border-primary',
                         }}
+                    />
+                    <NumberInput
+                        label="Maximum Attempts"
+                        placeholder="Enter maximum attempts allowed"
+                        value={data.max_attempts}
+                        onChange={(value) => setData('max_attempts', value)}
+                        error={errors.max_attempts}
+                        min={1}
+                        required
+                        icon={<Repeat className="h-4 w-4" />}
+                        classNames={{
+                            input: 'focus:border-primary',
+                        }}
+                        description="Number of times a participant can attempt this challenge"
                     />
                 </div>
 

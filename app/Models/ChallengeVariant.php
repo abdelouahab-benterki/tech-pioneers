@@ -6,9 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ChallengeVariant extends Model
 {
-    protected $fillable = [
-        'data',
-        'solution',
+    protected $guarded = [
+
     ];
 
     public function challenge()

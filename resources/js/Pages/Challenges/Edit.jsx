@@ -21,7 +21,7 @@ import {
     Star,
     ClipboardCheck,
     Trash,
-    Save, Target,
+    Save, Target, Repeat,
 } from 'lucide-react';
 
 const CATEGORIES = [
@@ -40,6 +40,7 @@ export default function Edit({ challenge }) {
         is_published: challenge?.is_published || false,
         requires_review: challenge?.requires_review || false,
         category: challenge?.category || '',
+        max_attempts: challenge?.max_attempts || 3,
     });
 
     const {errors} = usePage().props;
@@ -52,6 +53,7 @@ export default function Edit({ challenge }) {
         formData.append('description', data.description);
         formData.append('points', data.points);
         formData.append('category', data.category);
+        formData.append('max_attempts', data.max_attempts);
         formData.append('is_published', data.is_published ? '1' : '0');
         formData.append('requires_review', data.requires_review ? '1' : '0');
 
@@ -181,6 +183,20 @@ export default function Edit({ challenge }) {
                                     classNames={{
                                         input: 'focus:border-primary',
                                     }}
+                                />
+                                <NumberInput
+                                    label="Maximum Attempts"
+                                    placeholder="Enter maximum attempts allowed"
+                                    value={data.max_attempts}
+                                    onChange={(value) => setData('max_attempts', value)}
+                                    error={errors.max_attempts}
+                                    min={1}
+                                    required
+                                    icon={<Repeat className="h-4 w-4" />}
+                                    classNames={{
+                                        input: 'focus:border-primary',
+                                    }}
+                                    description="Number of times a participant can attempt this challenge"
                                 />
                             </div>
 

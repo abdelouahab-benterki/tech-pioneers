@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Challenge;
+use App\Models\ChallengeAssignment;
 use App\Models\ChallengeVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -36,6 +37,8 @@ class ChallengeVariantController extends Controller
         $validated = $request->validate([
             'data' => 'required|file|mimes:pdf|max:10240',
             'solution' => $challenge->requires_review ? 'nullable|string' : 'required|string',
+            'is_numeric_solution' => 'nullable|boolean',
+            'solution_tolerance' => 'nullable|numeric',
         ]);
 
         // Store PDF file
@@ -44,6 +47,8 @@ class ChallengeVariantController extends Controller
         $challenge->variants()->create([
             'data' => $pdfPath,
             'solution' => $validated['solution'],
+            'is_numeric_solution' => $validated['is_numeric_solution'] ?? false,
+            'solution_tolerance' => $validated['solution_tolerance'] ?? null,
         ]);
 
         return redirect()
@@ -64,10 +69,13 @@ class ChallengeVariantController extends Controller
         $validated = $request->validate([
             'data' => 'nullable|file|mimes:pdf|max:10240', // 10MB max
             'solution' => 'required|string',
+            'is_numeric_solution' => 'nullable|boolean',
+            'solution_tolerance' => 'nullable|numeric',
         ]);
 
-        $data = ['solution' => $validated['solution']];
+//        $data = ['solution' => $validated['solution']];
 
+        $data = ['solution' => $validated['solution'], 'is_numeric_solution' => $validated['is_numeric_solution'] ?? false, 'solution_tolerance' => $validated['solution_tolerance'] ?? null];
         if ($request->hasFile('data')) {
             // Delete old PDF if exists
             if ($variant->data) {
@@ -108,6 +116,31 @@ class ChallengeVariantController extends Controller
         return Storage::disk('private')->download(
             $variant->data,
             "variant_{$variant->id}.pdf"
+        );
+    }
+
+    public function preview(Challenge $challenge, ChallengeVariant $variant)
+    {
+        // Security check
+        if (!auth()->user()->hasRole('competitor')) {
+            abort(403);
+        }
+
+        $assignment = ChallengeAssignment::where([
+            'user_id' => auth()->id(),
+            'challenge_id' => $challenge->id,
+            'challenge_variant_id' => $variant->id,
+        ])->firstOrFail();
+
+        // Stream the file with headers that prevent download
+        return response()->file(
+            Storage::disk('private')->path($variant->data),
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline',
+                'X-Content-Type-Options' => 'nosniff',
+                'Cache-Control' => 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0'
+            ]
         );
     }
 }

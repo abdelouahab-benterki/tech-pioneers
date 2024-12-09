@@ -72,6 +72,7 @@ class ChallengeController extends Controller
             'is_published' => 'boolean',
             'requires_review' => 'boolean',
             'category' => 'required|string|in:analysis,solution,optimization',
+            'max_attempts' => 'required|integer|min:1',
         ]);
 
         // Handle image upload if present
@@ -131,7 +132,12 @@ class ChallengeController extends Controller
             }
         }
 
-        $assignment->load('variant');
+        $challenge->load(['attempts' => function($query) {
+            $query->where('user_id', auth()->id())
+                ->orderBy('created_at', 'desc');
+        }]);
+
+
 
         return Inertia::render('Challenges/Solve', [
             'challenge' => $challenge,
@@ -192,10 +198,21 @@ class ChallengeController extends Controller
             return redirect()->route('challenges.index')
                 ->with('success', 'Solution submitted successfully and pending review.');
         } else {
-            $isCorrect = $validated['solution'] === $variant->solution;
+            // Check if solution is correct based on type
+            $isCorrect = false;
+
+            if ($variant->is_numeric_solution) {
+                // For numeric solutions, check within tolerance
+                $submittedValue = floatval($validated['solution']);
+                $correctValue = floatval($variant->solution);
+                $isCorrect = abs($submittedValue - $correctValue) <= $variant->solution_tolerance;
+            } else {
+                // For non-numeric solutions, exact match
+                $isCorrect = strtolower(trim($validated['solution'])) === strtolower(trim($variant->solution));
+            }
 
             // Calculate points based on time taken
-            $timeElapsed = now()->diffInSeconds($challenge->starts_at);
+            $timeElapsed = abs(now()->diffInSeconds($challenge->starts_at));
             $totalTime = $challenge->duration_minutes * 60;
 
             // Calculate time bonus - faster answers get higher bonus
@@ -206,7 +223,7 @@ class ChallengeController extends Controller
             // Base points for correct answer is 50% of total possible points
             // Time bonus can add up to another 50% of total points
             // Faster answers get more of the time bonus
-            $basePoints = $challenge->points * 0.5;
+            $basePoints = $challenge->points;
             $timeBonus = $challenge->points * 0.5 * (1 - $timeRatio);
 
             $pointsEarned = $isCorrect ? ($basePoints + $timeBonus) : 0;
@@ -266,6 +283,7 @@ class ChallengeController extends Controller
             'is_published' => 'boolean',
             'requires_review' => 'boolean',
             'category' => 'required|string|in:analysis,solution,optimization',
+            'max_attempts' => 'required|integer|min:1',
         ]);
 
         if ($request->hasFile('image')) {

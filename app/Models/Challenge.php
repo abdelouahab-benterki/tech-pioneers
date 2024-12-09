@@ -19,4 +19,9 @@ class Challenge extends Model
     {
         return $this->hasMany(ChallengeAssignment::class);
     }
+
+    public function attempts()
+    {
+        return $this->hasMany(ChallengeAttempt::class);
+    }
 }

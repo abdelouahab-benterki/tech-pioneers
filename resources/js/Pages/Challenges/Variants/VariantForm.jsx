@@ -6,7 +6,7 @@ import {
     Group,
     Title,
     Text,
-    FileInput,
+    FileInput, NumberInput, Switch,
 } from '@mantine/core';
 import { Save, ArrowLeft, FileText, Upload } from 'lucide-react';
 import { Link } from '@inertiajs/react';
@@ -15,7 +15,8 @@ export default function VariantForm({ challenge, variant = null }) {
     const { data, setData, post, put, processing, errors } = useForm({
         data: null, // File object for PDF
         solution: variant?.solution || '',
-        _method: variant ? 'put' : 'post', // For proper method spoofing
+        is_numeric_solution:variant?.is_numeric_solution || false,
+        solution_tolerance: variant?.solution_tolerance || 0,
     });
 
     const handleSubmit = (e) => {
@@ -74,14 +75,39 @@ export default function VariantForm({ challenge, variant = null }) {
                     )}
                 </div>
 
-                <TextInput
-                    label="Solution"
-                    placeholder="Enter the solution"
-                    value={data.solution}
-                    onChange={(e) => setData('solution', e.target.value)}
-                    error={errors.solution}
-                    required
+                <Switch
+                    label="Numeric Solution"
+                    checked={data.is_numeric_solution}
+                    onChange={(e) => setData('is_numeric_solution', e.currentTarget.checked)}
                 />
+
+                {data.is_numeric_solution ? (
+                    <div className="space-y-4">
+                        <NumberInput
+                            label="Solution"
+                            value={data.solution}
+                            onChange={(value) => setData('solution', value)}
+                            required
+                        />
+
+                        <NumberInput
+                            label="Solution Tolerance (±)"
+                            value={data.solution_tolerance}
+                            onChange={(value) => setData('solution_tolerance', value)}
+                            min={0}
+                            step={0.01}
+                            placeholder="Enter acceptable deviation"
+                            description="Answers within this range will be considered correct"
+                        />
+                    </div>
+                ) : (
+                    <TextInput
+                        label="Solution"
+                        value={data.solution}
+                        onChange={(e) => setData('solution', e.target.value)}
+                        required
+                    />
+                )}
 
                 <Group position="apart" className="pt-4 border-t border-gray-200">
                     <Button

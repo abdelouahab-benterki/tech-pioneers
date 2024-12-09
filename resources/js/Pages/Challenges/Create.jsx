@@ -21,7 +21,7 @@ import {
     Star,
     ClipboardCheck,
     Trash,
-    Save, Target,
+    Save, Target, Repeat,
 } from 'lucide-react';
 
 
@@ -166,6 +166,21 @@ export default function Create() {
                                     classNames={{
                                         input: 'focus:border-primary',
                                     }}
+                                />
+
+                                <NumberInput
+                                    label="Maximum Attempts"
+                                    placeholder="Enter maximum attempts allowed"
+                                    value={data.max_attempts}
+                                    onChange={(value) => setData('max_attempts', value)}
+                                    error={errors.max_attempts}
+                                    min={1}
+                                    required
+                                    icon={<Repeat className="h-4 w-4" />}
+                                    classNames={{
+                                        input: 'focus:border-primary',
+                                    }}
+                                    description="Number of times a participant can attempt this challenge"
                                 />
                             </div>
 
