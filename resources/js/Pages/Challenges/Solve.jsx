@@ -115,7 +115,7 @@ export default function SolveChallenge({ challenge, assignment }) {
     }
 
     return (
-        <ScreenshotPrevention>
+        // <ScreenshotPrevention>
             <AuthenticatedLayout
                 header={
                     <div className="flex justify-between items-center">
@@ -400,7 +400,7 @@ export default function SolveChallenge({ challenge, assignment }) {
                     </form>
                 </Modal>
             </AuthenticatedLayout>
-        </ScreenshotPrevention>
+        // </ScreenshotPrevention>
 
     );
 }

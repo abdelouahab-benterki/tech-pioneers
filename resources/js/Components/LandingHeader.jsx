@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from '@inertiajs/react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -38,10 +39,10 @@ const Header = ({ logo }) => {
     };
 
     const menuItems = [
-        { text: "Home", href: "#" },
-        { text: "About", href: "#" },
-        { text: "Sponsors", href: "#" },
-        { text: "Participants", href: "#" }
+        { text: "Home", href: "/#" },
+        { text: "About", href: "/#about" },
+        { text: "Sponsors", href: "/#sponsors" },
+        { text: "Participants", href: "/#participants" }
     ];
 
     return (
@@ -82,9 +83,12 @@ const Header = ({ logo }) => {
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: index * 0.1 }}
                                 >
-                                    <a href={item.href} className="hover:text-custom-green font-bold text-xl transition">
+                                    <Link
+                                        href={item.href}
+                                        className="hover:text-custom-green font-bold text-xl transition"
+                                    >
                                         {item.text}
-                                    </a>
+                                    </Link>
                                 </motion.li>
                             ))}
                             <motion.li
@@ -92,12 +96,15 @@ const Header = ({ logo }) => {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.4 }}
                             >
-                                <a href="#" className="flex items-center space-x-3 bg-white text-primary px-6 py-2 rounded-full hover:text-custom-green hover:bg-secondary border-2 border-transparent hover:border-custom-green transition">
+                                <Link
+                                    href="/login"
+                                    className="flex items-center space-x-3 bg-white text-primary px-6 py-2 rounded-full hover:text-custom-green hover:bg-secondary border-2 border-transparent hover:border-custom-green transition"
+                                >
                                     <span className="font-bold text-xl">Login</span>
                                     <div className="w-8 h-8 rotate-45">
                                         <img src={logo} alt="logo" />
                                     </div>
-                                </a>
+                                </Link>
                             </motion.li>
                         </motion.ul>
                     </nav>
@@ -119,9 +126,12 @@ const Header = ({ logo }) => {
                                         custom={index}
                                         variants={menuItemVariants}
                                     >
-                                        <a href={item.href} className="hover:text-custom-green font-bold text-xl transition block">
+                                        <Link
+                                            href={item.href}
+                                            className="hover:text-custom-green font-bold text-xl transition block"
+                                        >
                                             {item.text}
-                                        </a>
+                                        </Link>
                                     </motion.li>
                                 ))}
                                 <motion.li
@@ -129,12 +139,15 @@ const Header = ({ logo }) => {
                                     variants={menuItemVariants}
                                     className="w-fit ml-auto"
                                 >
-                                    <a href="#" className="flex items-center justify-center space-x-3 bg-white text-primary px-6 py-2 rounded-full hover:text-custom-green hover:bg-secondary border-2 border-transparent hover:border-custom-green transition">
+                                    <Link
+                                        href="/login"
+                                        className="flex items-center justify-center space-x-3 bg-white text-primary px-6 py-2 rounded-full hover:text-custom-green hover:bg-secondary border-2 border-transparent hover:border-custom-green transition"
+                                    >
                                         <span className="font-bold text-xl">Login</span>
                                         <div className="w-8 h-8 rotate-45">
                                             <img src={logo} alt="logo" />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </motion.li>
                             </motion.ul>
                         </motion.nav>

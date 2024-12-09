@@ -45,7 +45,7 @@ export default function LandingPage() {
         <motion.div className='min-h-screen bg-secondary text-white font-spacegrotesk'>
             <Header logo={logo}/>
             <Hero logo={logo}/>
-            <section className='min-h-screen mt-20 lg:mt-60'>
+            <section className='min-h-screen mt-20 lg:mt-60' id='about'>
                 <div className='container mx-auto px-4'>
                     <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
                         <motion.div
@@ -71,7 +71,7 @@ export default function LandingPage() {
                             transition={{duration: 0.8, delay: 0.3}}
                             className='font-bold text-lg md:text-xl lg:text-2xl text-justify pt-6 flex justify-end mt-6'
                         >
-                            <p className='w-full lg:w-2/3'>
+                            <p className='w-full lg:w-2/3' >
                                 The "Tech Pioneers 2nd Edition" is a national competition bringing together engineering
                                 students
                                 from across Algeria. Teams solve industrial challenges through an online platform,
@@ -86,7 +86,8 @@ export default function LandingPage() {
                     </div>
                 </div>
             </section>
-            <section className='min-h-screen mt-20 lg:mt-60'>
+            <span id='sponsors' className='relative -top-96'></span>
+            <section className='min-h-screen mt-20 lg:mt-60' >
                 <motion.div className='container mx-auto px-4 relative'>
                     <motion.div
                         initial={{x: -100, opacity: 0}}
