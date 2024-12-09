@@ -10,4 +10,7 @@ export default defineConfig({
         }),
         react(),
     ],
+    build: {
+        target: 'es2022', // Or a more recent target that supports top-level await
+    }
 });
